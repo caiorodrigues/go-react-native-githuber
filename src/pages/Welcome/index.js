@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 
 import styles from './styles';
@@ -16,6 +17,8 @@ import styles from './styles';
 export default class Welcome extends Component {
   state = {
     username: '',
+    loading: false,
+    error: false,
   }
 
   checkUserExists = async (username) => {
@@ -32,19 +35,20 @@ export default class Welcome extends Component {
     const { username } = this.state;
     const { navigation } = this.props;
 
+    this.setState({ loading: true });
+
     try {
       await this.checkUserExists(username);
       await this.saveUser(username);
 
       navigation.navigate('Repositories');
     } catch {
-      console.tron.log('Usuário inexistente.');
+      this.setState({ loading: false, error: true });
     }
-
   };
 
   render() {
-    const { username } = this.state;
+    const { username, loading, error } = this.state;
 
     return (
       <View style={styles.container}>
@@ -54,6 +58,8 @@ export default class Welcome extends Component {
         <Text style={styles.text}>
           Para continuar precisamos que você informe seu usuário do GitHub.
         </Text>
+
+        {error && <Text style={styles.error}>Usuário inexistente</Text>}
 
         <View style={styles.form}>
           <TextInput
@@ -66,7 +72,9 @@ export default class Welcome extends Component {
             onChangeText={text => this.setState({ username: text })}
           />
           <TouchableOpacity style={styles.button} onPress={this.signIn}>
-            <Text style={styles.buttonText}>Prosseguir</Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#FFF" />
+            ) : (<Text style={styles.buttonText}>Prosseguir</Text>)}
           </TouchableOpacity>
 
         </View>
