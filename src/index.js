@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import '~/config/ReactotronConfig';
+import '~/config/DevTools.Config';
 
 import createNavigator from './routes';
 
@@ -12,6 +13,8 @@ export default class App extends Component {
 
   async componentDidMount() {
     const username = await AsyncStorage.getItem('@Githuber:username');
+
+    console.tron.log(`Aqui deveria estar o UserName: ${username}`);
 
     this.setState({
       userChecked: true,

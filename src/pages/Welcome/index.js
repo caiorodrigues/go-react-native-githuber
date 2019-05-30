@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import api from '~/services/api';
 
 import AsyncStorage from '@react-native-community/async-storage';
+import api from '~/services/api';
 
 import {
   View,
@@ -35,7 +35,7 @@ export default class Welcome extends Component {
   }
 
   saveUser = async (username) => {
-    await AsyncStorage.setItem('@Githuber: username', username);
+    await AsyncStorage.setItem('@Githuber:username', username);
   }
 
   signIn = async () => {
