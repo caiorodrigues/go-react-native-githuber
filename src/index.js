@@ -1,46 +1,31 @@
-import './config/ReactotronConfig';
+import React, { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import '~/config/ReactotronConfig';
+import '~/config/DevTools.Config';
 
-import React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import createNavigator from './routes';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class App extends Component {
+  state = {
+    userChecked: false,
+    userLogged: false,
+  };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  async componentDidMount() {
+    const username = await AsyncStorage.getItem('@Githuber:username');
 
-const App = () => (
-  <View style={styles.container}>
-    <Text style={styles.welcome}>Welcome to React Native!</Text>
-    <Text style={styles.instructions}>To get started, edit App.js</Text>
-    <Text style={styles.instructions}>{instructions}</Text>
-  </View>
-);
+    this.setState({
+      userChecked: true,
+      userLogged: !!username,
+    });
+  }
 
+  render() {
+    const { userChecked, userLogged } = this.state;
 
-export default App;
+    if (!userChecked) return null;
+
+    const Routes = createNavigator(userLogged);
+    return <Routes />;
+  }
+}
