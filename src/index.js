@@ -14,8 +14,6 @@ export default class App extends Component {
   async componentDidMount() {
     const username = await AsyncStorage.getItem('@Githuber:username');
 
-    console.tron.log(`Aqui deveria estar o UserName: ${username}`);
-
     this.setState({
       userChecked: true,
       userLogged: !!username,
